@@ -12,6 +12,11 @@
             box-sizing: border-box;
         }
 
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: #000000;
@@ -20,7 +25,7 @@
 
         .container {
             width: 100%;
-            height: 100vh;
+            height: 100%;
             display: flex;
             flex-direction: column;
         }
@@ -30,6 +35,7 @@
             text-align: center;
             background: linear-gradient(180deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.5) 100%);
             z-index: 10;
+            flex-shrink: 0;
         }
 
         .title {
@@ -71,7 +77,8 @@
         .chart-wrapper {
             position: relative;
             flex: 1;
-            overflow: hidden;
+            width: 100%;
+            min-height: 0;
         }
 
         #chart {
@@ -192,261 +199,266 @@
     </div>
 
     <script>
-        // 数据定义
-        const periods = ['FY24', 'FY25'];
+        // 等待 DOM 完全加载
+        document.addEventListener('DOMContentLoaded', function() {
+            // 数据定义
+            const periods = ['FY24', 'FY25'];
 
-        const fy24Data = [
-            {name:'1,000元',value:765.7,percent:34.27},
-            {name:'500元',value:479.8,percent:21.47},
-            {name:'100元',value:284.1,percent:12.72},
-            {name:'200元',value:188.6,percent:8.44},
-            {name:'648元',value:112.7,percent:5.04},
-            {name:'50元',value:63.6,percent:2.84},
-            {name:'88元',value:34.4,percent:1.54},
-            {name:'300元',value:32.2,percent:1.44},
-            {name:'68元',value:25.0,percent:1.12},
-            {name:'30元',value:19.3,percent:0.87},
-            {name:'10元',value:18.9,percent:0.85},
-            {name:'198元',value:14.0,percent:0.63},
-            {name:'328元',value:13.7,percent:0.61},
-            {name:'128元',value:13.1,percent:0.59},
-            {name:'other',value:169.2,percent:7.57}
-        ];
+            const fy24Data = [
+                {name:'1,000元',value:765.7,percent:34.27},
+                {name:'500元',value:479.8,percent:21.47},
+                {name:'100元',value:284.1,percent:12.72},
+                {name:'200元',value:188.6,percent:8.44},
+                {name:'648元',value:112.7,percent:5.04},
+                {name:'50元',value:63.6,percent:2.84},
+                {name:'88元',value:34.4,percent:1.54},
+                {name:'300元',value:32.2,percent:1.44},
+                {name:'68元',value:25.0,percent:1.12},
+                {name:'30元',value:19.3,percent:0.87},
+                {name:'10元',value:18.9,percent:0.85},
+                {name:'198元',value:14.0,percent:0.63},
+                {name:'328元',value:13.7,percent:0.61},
+                {name:'128元',value:13.1,percent:0.59},
+                {name:'other',value:169.2,percent:7.57}
+            ];
 
-        const fy25Data = [
-            {name:'1,000元',value:656.9,percent:33.97},
-            {name:'500元',value:498.5,percent:25.7},
-            {name:'100元',value:225.0,percent:11.6},
-            {name:'200元',value:166.7,percent:8.62},
-            {name:'50元',value:67.9,percent:3.51},
-            {name:'648元',value:42.0,percent:2.17},
-            {name:'300元',value:40.4,percent:2.09},
-            {name:'88元',value:25.8,percent:1.33},
-            {name:'68元',value:16.4,percent:0.85},
-            {name:'328元',value:14.8,percent:0.76},
-            {name:'198元',value:13.6,percent:0.70},
-            {name:'30元',value:13.5,percent:0.70},
-            {name:'128元',value:9.9,percent:0.51},
-            {name:'6元',value:5.7,percent:0.29},
-            {name:'other元',value:136.9,percent:7.08}
-        ];
+            const fy25Data = [
+                {name:'1,000元',value:656.9,percent:33.97},
+                {name:'500元',value:498.5,percent:25.7},
+                {name:'100元',value:225.0,percent:11.6},
+                {name:'200元',value:166.7,percent:8.62},
+                {name:'50元',value:67.9,percent:3.51},
+                {name:'648元',value:42.0,percent:2.17},
+                {name:'300元',value:40.4,percent:2.09},
+                {name:'88元',value:25.8,percent:1.33},
+                {name:'68元',value:16.4,percent:0.85},
+                {name:'328元',value:14.8,percent:0.76},
+                {name:'198元',value:13.6,percent:0.70},
+                {name:'30元',value:13.5,percent:0.70},
+                {name:'128元',value:9.9,percent:0.51},
+                {name:'6元',value:5.7,percent:0.29},
+                {name:'other元',value:136.9,percent:7.08}
+            ];
 
-        const colorMap = {
-            '6元': '#FF22BB',
-            '10元': '#CC22FF',
-            '30元': '#4422FF',
-            '50元': '#CCFF00',
-            '68元': '#00AA66',
-            '100元': '#37A2DA',
-            '128元': '#8822FF',
-            '198元': '#0055FF',
-            '200元': '#FF7700',
-            '300元': '#00CCCC',
-            '328元': '#00BBFF',
-            '500元': '#FFDD00',
-            '648元': '#00DD22',
-            '1,000元': '#FF0000',
-            'other': '#FF5577',
-            '88元': '#32C5E9',
-            '400元': '#fac858',
-            '527元': '#E062AE',
-            '700元': '#ff9f7f',
-            'other元': '#FF5577'
-        };
-
-        const dataMap = {
-            'FY24': fy24Data,
-            'FY25': fy25Data
-        };
-
-        // 应用程序状态
-        let currentPeriod = 'FY24';
-        let autoPlayEnabled = true;
-        let autoPlayInterval = null;
-
-        // 初始化图表
-        const chartDom = document.getElementById('chart');
-        const myChart = echarts.init(chartDom, 'dark');
-
-        function getChartOption(data) {
-            // 排序数据
-            const sortedData = [...data].sort((a, b) => b.value - a.value);
-
-            return {
-                backgroundColor: '#000000',
-                title: {
-                    text: '',
-                    left: 'center',
-                    top: 20,
-                    textStyle: {
-                        color: '#ffffff',
-                        fontSize: 24,
-                        fontWeight: 'bold'
-                    }
-                },
-                tooltip: {
-                    trigger: 'axis',
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    borderColor: '#666666',
-                    textStyle: {
-                        color: '#ffffff'
-                    },
-                    formatter: function(params) {
-                        if (params.length === 0) return '';
-                        const data = params[0];
-                        return `${data.value[0]}<br/>销售额: ¥${data.value[1].toFixed(1)}M<br/>占比: ${(data.value[1] / sortedData.reduce((sum, item) => sum + item.value, 0) * 100).toFixed(2)}%`;
-                    }
-                },
-                grid: {
-                    left: '3%',
-                    right: '15%',
-                    top: '10%',
-                    bottom: '5%',
-                    containLabel: true
-                },
-                xAxis: {
-                    type: 'value',
-                    axisLabel: {
-                        color: '#999999',
-                        fontSize: 12
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: '#333333'
-                        }
-                    },
-                    splitLine: {
-                        show: true,
-                        lineStyle: {
-                            color: '#222222',
-                            type: 'dashed'
-                        }
-                    }
-                },
-                yAxis: {
-                    type: 'category',
-                    data: sortedData.map(item => item.name),
-                    axisLabel: {
-                        color: '#ffffff',
-                        fontSize: 12,
-                        overflow: 'break'
-                    },
-                    axisLine: {
-                        lineStyle: {
-                            color: '#333333'
-                        }
-                    },
-                    splitLine: {
-                        show: false
-                    }
-                },
-                series: [
-                    {
-                        type: 'bar',
-                        data: sortedData.map(item => ({
-                            value: [item.name, item.value],
-                            itemStyle: {
-                                color: colorMap[item.name] || '#37A2DA'
-                            }
-                        })),
-                        label: {
-                            show: true,
-                            position: 'right',
-                            formatter: function(params) {
-                                const dataItem = sortedData.find(item => item.name === params.value[0]);
-                                return `¥${dataItem.value.toFixed(1)}M (${dataItem.percent.toFixed(2)}%)`;
-                            },
-                            color: '#ffffff',
-                            fontSize: 11,
-                            distance: 10
-                        },
-                        animationDuration: 1000,
-                        animationEasing: 'cubicOut'
-                    }
-                ]
+            const colorMap = {
+                '6元': '#FF22BB',
+                '10元': '#CC22FF',
+                '30元': '#4422FF',
+                '50元': '#CCFF00',
+                '68元': '#00AA66',
+                '100元': '#37A2DA',
+                '128元': '#8822FF',
+                '198元': '#0055FF',
+                '200元': '#FF7700',
+                '300元': '#00CCCC',
+                '328元': '#00BBFF',
+                '500元': '#FFDD00',
+                '648元': '#00DD22',
+                '1,000元': '#FF0000',
+                'other': '#FF5577',
+                '88元': '#32C5E9',
+                '400元': '#fac858',
+                '527元': '#E062AE',
+                '700元': '#ff9f7f',
+                'other元': '#FF5577'
             };
-        }
 
-        function updateChart(period) {
-            currentPeriod = period;
-            const data = dataMap[period];
+            const dataMap = {
+                'FY24': fy24Data,
+                'FY25': fy25Data
+            };
 
-            // 更新图表
-            myChart.setOption(getChartOption(data));
+            // 应用程序状态
+            let currentPeriod = 'FY24';
+            let autoPlayEnabled = true;
+            let autoPlayInterval = null;
 
-            // 更新水印
-            document.getElementById('watermark').textContent = period;
+            // 初始化图表
+            const chartDom = document.getElementById('chart');
+            const myChart = echarts.init(chartDom);
 
-            // 更新信息面板
-            document.getElementById('currentPeriod').textContent = period;
-            const totalSales = data.reduce((sum, item) => sum + item.value, 0).toFixed(1);
-            document.getElementById('totalSales').textContent = `¥${totalSales}M`;
-            document.getElementById('denominationCount').textContent = data.length;
+            function getChartOption(data) {
+                // 排序数据
+                const sortedData = [...data].sort((a, b) => b.value - a.value);
+                const totalValue = sortedData.reduce((sum, item) => sum + item.value, 0);
 
-            // 更新按钮状态
-            document.querySelectorAll('.controls .btn[data-period]').forEach(btn => {
-                btn.classList.toggle('active', btn.dataset.period === period);
-            });
-        }
-
-        function startAutoPlay() {
-            autoPlayEnabled = true;
-            document.getElementById('autoPlayStatus').textContent = '启用';
-            document.getElementById('toggleAutoPlay').textContent = '⏸ 暂停自动播放';
-            document.getElementById('status').textContent = '自动播放中...';
-
-            autoPlayInterval = setInterval(() => {
-                const currentIndex = periods.indexOf(currentPeriod);
-                const nextPeriod = periods[(currentIndex + 1) % periods.length];
-                updateChart(nextPeriod);
-            }, 5000);
-        }
-
-        function stopAutoPlay() {
-            autoPlayEnabled = false;
-            document.getElementById('autoPlayStatus').textContent = '禁用';
-            document.getElementById('toggleAutoPlay').textContent = '▶ 开始自动播放';
-            document.getElementById('status').textContent = '已暂停';
-            clearInterval(autoPlayInterval);
-        }
-
-        // 事件监听
-        document.querySelectorAll('.controls .btn[data-period]').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const period = e.target.dataset.period;
-                updateChart(period);
-                stopAutoPlay();
-            });
-        });
-
-        document.getElementById('toggleAutoPlay').addEventListener('click', () => {
-            if (autoPlayEnabled) {
-                stopAutoPlay();
-            } else {
-                startAutoPlay();
+                return {
+                    backgroundColor: '#000000',
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer: {
+                            type: 'shadow'
+                        },
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        borderColor: '#666666',
+                        textStyle: {
+                            color: '#ffffff',
+                            fontSize: 12
+                        },
+                        formatter: function(params) {
+                            if (!params || params.length === 0) return '';
+                            const item = params[0];
+                            const dataItem = sortedData.find(d => d.name === item.name);
+                            if (!dataItem) return '';
+                            return `<strong>${item.name}</strong><br/>销售额: ¥${dataItem.value.toFixed(1)}M<br/>占比: ${dataItem.percent.toFixed(2)}%`;
+                        }
+                    },
+                    grid: {
+                        left: '2%',
+                        right: '12%',
+                        top: '5%',
+                        bottom: '5%',
+                        containLabel: true
+                    },
+                    xAxis: {
+                        type: 'value',
+                        axisLabel: {
+                            color: '#999999',
+                            fontSize: 11
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#333333'
+                            }
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                color: '#222222',
+                                type: 'dashed'
+                            }
+                        }
+                    },
+                    yAxis: {
+                        type: 'category',
+                        data: sortedData.map(item => item.name),
+                        axisLabel: {
+                            color: '#ffffff',
+                            fontSize: 11
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: '#333333'
+                            }
+                        },
+                        splitLine: {
+                            show: false
+                        }
+                    },
+                    series: [
+                        {
+                            type: 'bar',
+                            data: sortedData.map(item => ({
+                                value: item.value,
+                                name: item.name,
+                                itemStyle: {
+                                    color: colorMap[item.name] || '#37A2DA'
+                                }
+                            })),
+                            label: {
+                                show: true,
+                                position: 'right',
+                                formatter: function(params) {
+                                    const dataItem = sortedData[params.dataIndex];
+                                    return `¥${dataItem.value.toFixed(1)}M (${dataItem.percent.toFixed(2)}%)`;
+                                },
+                                color: '#ffffff',
+                                fontSize: 10,
+                                distance: 8
+                            },
+                            animationDuration: 800,
+                            animationEasing: 'cubicOut'
+                        }
+                    ]
+                };
             }
-        });
 
-        document.getElementById('downloadPng').addEventListener('click', () => {
-            const url = myChart.getDataURL({
-                type: 'png',
-                pixelRatio: 2,
-                backgroundColor: '#000000'
+            function updateChart(period) {
+                currentPeriod = period;
+                const data = dataMap[period];
+
+                // 更新图表
+                myChart.setOption(getChartOption(data));
+
+                // 更新水印
+                document.getElementById('watermark').textContent = period;
+
+                // 更新信息面板
+                document.getElementById('currentPeriod').textContent = period;
+                const totalSales = data.reduce((sum, item) => sum + item.value, 0).toFixed(1);
+                document.getElementById('totalSales').textContent = `¥${totalSales}M`;
+                document.getElementById('denominationCount').textContent = data.length;
+
+                // 更新按钮状态
+                document.querySelectorAll('.controls .btn[data-period]').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.period === period);
+                });
+            }
+
+            function startAutoPlay() {
+                autoPlayEnabled = true;
+                document.getElementById('autoPlayStatus').textContent = '启用';
+                document.getElementById('toggleAutoPlay').textContent = '⏸ 暂停自动播放';
+                document.getElementById('status').textContent = '自动播放中...';
+
+                autoPlayInterval = setInterval(() => {
+                    const currentIndex = periods.indexOf(currentPeriod);
+                    const nextPeriod = periods[(currentIndex + 1) % periods.length];
+                    updateChart(nextPeriod);
+                }, 5000);
+            }
+
+            function stopAutoPlay() {
+                autoPlayEnabled = false;
+                document.getElementById('autoPlayStatus').textContent = '禁用';
+                document.getElementById('toggleAutoPlay').textContent = '▶ 开始自动播放';
+                document.getElementById('status').textContent = '已暂停';
+                clearInterval(autoPlayInterval);
+            }
+
+            // 事件监听
+            document.querySelectorAll('.controls .btn[data-period]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const period = e.target.dataset.period;
+                    updateChart(period);
+                    stopAutoPlay();
+                });
             });
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `销售额排序-${currentPeriod}-${new Date().getTime()}.png`;
-            link.click();
-        });
 
-        // 响应式处理
-        window.addEventListener('resize', () => {
-            myChart.resize();
-        });
+            document.getElementById('toggleAutoPlay').addEventListener('click', () => {
+                if (autoPlayEnabled) {
+                    stopAutoPlay();
+                } else {
+                    startAutoPlay();
+                }
+            });
 
-        // 初始化
-        updateChart('FY24');
-        startAutoPlay();
+            document.getElementById('downloadPng').addEventListener('click', () => {
+                try {
+                    const url = myChart.getDataURL({
+                        type: 'png',
+                        pixelRatio: 2,
+                        backgroundColor: '#000000'
+                    });
+                    const link = document.createElement('a');
+                    link.href = url;
+                    link.download = `销售额排序-${currentPeriod}-${new Date().getTime()}.png`;
+                    link.click();
+                } catch (e) {
+                    alert('下载失败，请重试');
+                    console.error(e);
+                }
+            });
+
+            // 响应式处理
+            window.addEventListener('resize', () => {
+                myChart.resize();
+            });
+
+            // 初始化
+            updateChart('FY24');
+            startAutoPlay();
+        });
     </script>
 </body>
 </html>
