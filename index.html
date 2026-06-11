@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>各财年面值与销量动态柱状图</title>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>财年数据分析 - 动态柱状图</h1>
+        
+        <div class="controls">
+            <button id="animateBtn" class="btn btn-primary">重新播放动画</button>
+            <button id="toggleDataBtn" class="btn btn-secondary">切换数据视图</button>
+        </div>
+        
+        <div id="chart" class="chart-container"></div>
+        
+        <div class="data-info">
+            <h2>数据说明</h2>
+            <table>
+                <tr>
+                    <th>财年</th>
+                    <th>面值</th>
+                    <th>销量</th>
+                    <th>销售额</th>
+                </tr>
+                <tbody id="dataTable"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="chart.js"></script>
+</body>
+</html>
