@@ -183,7 +183,7 @@
                 </div>
                 <div class="info-item">
                     <span class="info-label">总销售额:</span>
-                    <span class="info-value" id="totalSales">¥2,233.4M</span>
+                    <span class="info-value" id="totalSales">¥2,233.4亿元</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">面值数量:</span>
@@ -300,7 +300,7 @@
                             const item = params[0];
                             const dataItem = sortedData.find(d => d.name === item.name);
                             if (!dataItem) return '';
-                            return `<strong>${item.name}</strong><br/>销售额: ¥${dataItem.value.toFixed(1)}M<br/>占比: ${dataItem.percent.toFixed(2)}%`;
+                            return `<strong>${item.name}</strong><br/>销售额: ¥${dataItem.value.toFixed(1)}亿元<br/>占比: ${dataItem.percent.toFixed(2)}%`;
                         }
                     },
                     grid: {
@@ -360,7 +360,7 @@
                                 position: 'right',
                                 formatter: function(params) {
                                     const dataItem = sortedData[params.dataIndex];
-                                    return `¥${dataItem.value.toFixed(1)}M (${dataItem.percent.toFixed(2)}%)`;
+                                    return `¥${dataItem.value.toFixed(1)}亿元 (${dataItem.percent.toFixed(2)}%)`;
                                 },
                                 color: '#ffffff',
                                 fontSize: 10,
@@ -386,7 +386,7 @@
                 // 更新信息面板
                 document.getElementById('currentPeriod').textContent = period;
                 const totalSales = data.reduce((sum, item) => sum + item.value, 0).toFixed(1);
-                document.getElementById('totalSales').textContent = `¥${totalSales}M`;
+                document.getElementById('totalSales').textContent = `¥${totalSales}亿元`;
                 document.getElementById('denominationCount').textContent = data.length;
 
                 // 更新按钮状态
