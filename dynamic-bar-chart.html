@@ -183,7 +183,7 @@
                 </div>
                 <div class="info-item">
                     <span class="info-label">总销售额:</span>
-                    <span class="info-value" id="totalSales">¥2,233.4亿元</span>
+                    <span class="info-value" id="totalSales">¥558.4亿元</span>
                 </div>
                 <div class="info-item">
                     <span class="info-label">面值数量:</span>
@@ -201,43 +201,43 @@
     <script>
         // 等待 DOM 完全加载
         document.addEventListener('DOMContentLoaded', function() {
-            // 数据定义
+            // 数据定义（销售额 ÷ 4，保留一位小数）
             const periods = ['FY24', 'FY25'];
 
             const fy24Data = [
-                {name:'1,000元',value:765.7,percent:34.27},
-                {name:'500元',value:479.8,percent:21.47},
-                {name:'100元',value:284.1,percent:12.72},
-                {name:'200元',value:188.6,percent:8.44},
-                {name:'648元',value:112.7,percent:5.04},
-                {name:'50元',value:63.6,percent:2.84},
-                {name:'88元',value:34.4,percent:1.54},
-                {name:'300元',value:32.2,percent:1.44},
-                {name:'68元',value:25.0,percent:1.12},
-                {name:'30元',value:19.3,percent:0.87},
-                {name:'10元',value:18.9,percent:0.85},
-                {name:'198元',value:14.0,percent:0.63},
-                {name:'328元',value:13.7,percent:0.61},
-                {name:'128元',value:13.1,percent:0.59},
-                {name:'other',value:169.2,percent:7.57}
+                {name:'1,000元',value:191.4,percent:34.27},
+                {name:'500元',value:119.95,percent:21.47},
+                {name:'100元',value:71.0,percent:12.72},
+                {name:'200元',value:47.15,percent:8.44},
+                {name:'648元',value:28.2,percent:5.04},
+                {name:'50元',value:15.9,percent:2.84},
+                {name:'88元',value:8.6,percent:1.54},
+                {name:'300元',value:8.1,percent:1.44},
+                {name:'68元',value:6.3,percent:1.12},
+                {name:'30元',value:4.8,percent:0.87},
+                {name:'10元',value:4.7,percent:0.85},
+                {name:'198元',value:3.5,percent:0.63},
+                {name:'328元',value:3.4,percent:0.61},
+                {name:'128元',value:3.3,percent:0.59},
+                {name:'other',value:42.3,percent:7.57}
             ];
 
             const fy25Data = [
-                {name:'1,000元',value:656.9,percent:33.97},
-                {name:'500元',value:498.5,percent:25.7},
-                {name:'100元',value:225.0,percent:11.6},
-                {name:'200元',value:166.7,percent:8.62},
-                {name:'50元',value:67.9,percent:3.51},
-                {name:'648元',value:42.0,percent:2.17},
-                {name:'300元',value:40.4,percent:2.09},
-                {name:'88元',value:25.8,percent:1.33},
-                {name:'68元',value:16.4,percent:0.85},
-                {name:'328元',value:14.8,percent:0.76},
-                {name:'198元',value:13.6,percent:0.70},
-                {name:'30元',value:13.5,percent:0.70},
-                {name:'128元',value:9.9,percent:0.51},
-                {name:'6元',value:5.7,percent:0.29},
-                {name:'other元',value:136.9,percent:7.08}
+                {name:'1,000元',value:164.2,percent:33.97},
+                {name:'500元',value:124.6,percent:25.7},
+                {name:'100元',value:56.3,percent:11.6},
+                {name:'200元',value:41.7,percent:8.62},
+                {name:'50元',value:17.0,percent:3.51},
+                {name:'648元',value:10.5,percent:2.17},
+                {name:'300元',value:10.1,percent:2.09},
+                {name:'88元',value:6.5,percent:1.33},
+                {name:'68元',value:4.1,percent:0.85},
+                {name:'328元',value:3.7,percent:0.76},
+                {name:'198元',value:3.4,percent:0.70},
+                {name:'30元',value:3.4,percent:0.70},
+                {name:'128元',value:2.5,percent:0.51},
+                {name:'6元',value:1.4,percent:0.29},
+                {name:'other元',value:34.2,percent:7.08}
             ];
 
             const colorMap = {
